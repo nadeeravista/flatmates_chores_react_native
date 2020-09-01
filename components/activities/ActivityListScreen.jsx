@@ -4,6 +4,7 @@ import ScreenTitle from '../form/ScreenTitle.jsx'
 import SummaryComponent from '../form/SummaryComponent.jsx';
 import ActivityListComponent from '../form/ListComponent.jsx';
 import HeaderActionBarComponent from '../actionbar/HeaderActionBarComponent.jsx'
+import { connect } from 'react-redux'
 
 const style = StyleSheet.create({
     container: {
@@ -33,8 +34,22 @@ class ActivityListScreen extends Component {
         }
     }
 
+    componentDidMount() {
+
+        fetch(this.props.settings.baseUrl + "/activity/all")
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    activities: json.data
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     handleOnSearchClick = (message) => {
-        alert("Searching activities "+message)
+        alert("Searching activities " + message)
     }
 
     handleOnAddClick = () => {
@@ -42,11 +57,13 @@ class ActivityListScreen extends Component {
     }
 
     render() {
+
+        console.log(this.props.settings.baseUrl)
         return (
             <SafeAreaView style={style.container}>
                 <HeaderActionBarComponent
-                    handleOnSearchClick={()=> this.handleOnSearchClick("Clicked Search Icon")}
-                    handleOnAddClick={this.handleOnAddClick} 
+                    handleOnSearchClick={() => this.handleOnSearchClick("Clicked Search Icon")}
+                    handleOnAddClick={this.handleOnAddClick}
                 />
                 <ScreenTitle title="Activities"></ScreenTitle>
                 <View style={style.summary}>
@@ -60,4 +77,12 @@ class ActivityListScreen extends Component {
     }
 }
 
-export default ActivityListScreen
+
+function mapStateToProps(state) {
+    return {
+        settings: state
+    }
+}
+
+
+export default connect(mapStateToProps, null)(ActivityListScreen)
