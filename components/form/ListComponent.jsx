@@ -41,13 +41,12 @@ class ListComponent extends Component {
             <View style={style.container}>
                 {this.props.items.map((item, index) => {
                     return (
-                        <View style={style.item}>
+                        <View key={index} style={style.item}>
                             <FontAwesome5
                                 name={item.icon}
                                 style={style.itemIcon}
                             />
                             <Text style={style.itemText} key={index} >{item.title} by {item.title1}</Text>
-                            
                         </View>
                     )
                 })}
